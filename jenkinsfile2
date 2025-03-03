@@ -28,7 +28,9 @@ pipeline {
 
     post {
         always {
-            junit 'newman-report.xml' 
+           junit 'newman-report.xml'    
+            archiveArtifacts artifacts: 'newman-report.xml, newman-report.html' 
+
         }
     }
 }
