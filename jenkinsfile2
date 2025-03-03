@@ -29,8 +29,8 @@ pipeline {
 
     post {
         always {
-            echo 'Publication des résultats des tests...'
-            junit 'newman-report.xml'
+            // echo 'Publication des résultats des tests...'
+        archiveArtifacts artifacts: 'newman-report.xml'
         }
     }
 }
