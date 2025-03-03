@@ -15,8 +15,13 @@ pipeline{
         }
         stage('test api'){
             steps{
-                sf 'newman run collections/collection1.json -r cli,junit --reporter-junit-export="newman-report.xml"'
+                sh 'newman run collections/collection1.json -r cli,junit --reporter-junit-export="newman-report.xml"'
             }
+        }
+    }
+    post{
+        always{
+            junit 'newman-report.xml'
         }
     }
 }
