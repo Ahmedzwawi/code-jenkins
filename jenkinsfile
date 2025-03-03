@@ -1,0 +1,22 @@
+pipeline{
+    agent{
+        docker{
+            image "postman/newman"
+            args '--entrypoint=""'
+            //ajout image pour installer htmletxtra
+        }
+    }
+
+    stages{
+        stage('verifier la version de newman'){
+            steps{
+                sh "newman --version"
+                   }
+        }
+        stage('test api'){
+            steps{
+                sf 'newman run collections/collection1.json -r cli,junit --reporter-junit-export="newman-report.xml"'
+            }
+        }
+    }
+}
