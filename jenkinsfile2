@@ -9,6 +9,7 @@ pipeline {
     stages {
         stage('Installer htmlextra') {
             steps {
+                echo 'Installation du reporter htmlextra...'
                 sh "npm install newman-reporter-htmlextra"  
             }
         }
@@ -21,17 +22,17 @@ pipeline {
 
         stage('Test API') {
             steps {
-                sh 'npx newman run collections/collection1.json -r cli,htmlextra,junit --reporter-junit-export="newman-report.xml"'
+                echo 'Exécution des tests API...'
+                sh 'npx newman run collections/collection1.json -r cli,htmlextra,junit --reporter-junit-export="newman-report.xml" --reporter-htmlextra-export="newman-report.html"'
             }
         }
     }
 
-  post {
-    always {
-        echo 'Publication des résultats des tests...'
-        sh 'cat newman-report.xml'  // Affiche le contenu du fichier
-        archiveArtifacts artifacts: 'newman-report.xml'
+    post {
+        always {
+            echo 'Publication des résultats des tests...'
+            junit 'newman-report.xml' // Affiche les résultats dans Jenkins
+            archiveArtifacts artifacts: 'newman-report.xml, newman-report.html' // Permet de télécharger les rapports
+        }
     }
-}
-
 }
